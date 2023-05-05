@@ -1,19 +1,19 @@
 #include "Player.h"
 
 Player::Player(Vector3 position, float radius, Color color)
-    : position(position), previousPosition(position), radius(radius), color(color) {}
+    : position(position), previousPosition(position), radius(radius), color(color), speed(0.2f) {}
 
 void Player::Update() {
     previousPosition = position;
 
     if (IsKeyDown(KEY_RIGHT))
-        position.x += 0.2f;
+        position.x += speed;
     else if (IsKeyDown(KEY_LEFT))
-        position.x -= 0.2f;
+        position.x -= speed;
     else if (IsKeyDown(KEY_DOWN))
-        position.z += 0.2f;
+        position.z += speed;
     else if (IsKeyDown(KEY_UP))
-        position.z -= 0.2f;
+        position.z -= speed;
 }
 
 void Player::Draw() const {
@@ -48,4 +48,8 @@ void Player::ResetPosition() {
 
 void Player::SetColor(Color newColor) {
     color = newColor;
+}
+
+void Player::SetSpeed(float newSpeed) {
+    speed = newSpeed;
 }

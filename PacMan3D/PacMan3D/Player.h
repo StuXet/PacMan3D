@@ -10,10 +10,12 @@ public:
     Vector3 GetPosition() const;
     void ResetPosition();
     void SetColor(Color color);
+    void SetSpeed(float newSpeed);
 
 private:
     Vector3 position;
     Vector3 previousPosition;
     float radius;
+    float speed;
     Color color;
 };
