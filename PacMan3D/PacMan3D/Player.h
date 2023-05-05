@@ -6,10 +6,10 @@ public:
 
     void Update();
     void Draw() const;
-    void SetColor(Color color);
     BoundingBox GetBoundingBox() const;
-    void ResetPosition();
     Vector3 GetPosition() const;
+    void ResetPosition();
+    void SetColor(Color color);
 
 private:
     Vector3 position;
