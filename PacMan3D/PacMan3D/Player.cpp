@@ -54,3 +54,6 @@ void Player::SetSpeed(float newSpeed) {
     speed = newSpeed;
 }
 
+float Player::GetRadius() const {
+    return radius;
+}

@@ -38,6 +38,7 @@ int main(void) {
 	//ENEMY
 	Enemy enemy({ 10.0f, 0.5f, 10.0f }, 0.3f, RED);
 	enemy.SetSpeed(0.08f);
+	bool isDead = false;
 
 
 	while (!WindowShouldClose()) 
@@ -98,51 +99,61 @@ int main(void) {
 			//----------------------------------------------------------------------------------
 
 			//ENEMY
-			enemy.Update(player.GetPosition(), mapLayout);
+			if (!isDead) {
+				player.Update();
+
+				// Move enemy
+				enemy.Update(player.GetPosition(), mapLayout);
+
+				// Check for collision between player and enemy
+				if (CheckCollisionSpheres(player.GetPosition(), player.GetRadius(), enemy.GetPosition(), enemy.GetRadius())) {
+					isDead = true;
+				}
 
 
-			// Update player
-			player.Update();
 
-			collision = false;
+				// Update player
+				//player.Update();
 
-			BoundingBox playerBox = player.GetBoundingBox();
+				collision = false;
+
+				BoundingBox playerBox = player.GetBoundingBox();
 
 
-			/*BoundingBox leftWallBox = leftWall.GetBoundingBox();
-			BoundingBox topWallBox = topWall.GetBoundingBox();
-			BoundingBox bottomWallBox = bottomWall.GetBoundingBox();*/
+				/*BoundingBox leftWallBox = leftWall.GetBoundingBox();
+				BoundingBox topWallBox = topWall.GetBoundingBox();
+				BoundingBox bottomWallBox = bottomWall.GetBoundingBox();*/
 
-			//if (CheckCollisionBoxes(playerBox, leftWallBox) || CheckCollisionBoxes(playerBox, topWallBox) || CheckCollisionBoxes(playerBox, bottomWallBox)) 
-			//{
-			//	collision = true;
-			//	player.ResetPosition(); // Reset player position to the previous frame
-			//}
+				//if (CheckCollisionBoxes(playerBox, leftWallBox) || CheckCollisionBoxes(playerBox, topWallBox) || CheckCollisionBoxes(playerBox, bottomWallBox)) 
+				//{
+				//	collision = true;
+				//	player.ResetPosition(); // Reset player position to the previous frame
+				//}
 
-			player.SetColor(collision ? RED : YELLOW);
+				player.SetColor(collision ? RED : YELLOW);
 
-			if (!collision && pointCube.IsActive() && CheckCollisionBoxes(playerBox, pointCube.GetBoundingBox())) {
-				pointCube.SetActive(false);
-				score++;
-			}
+				if (!collision && pointCube.IsActive() && CheckCollisionBoxes(playerBox, pointCube.GetBoundingBox())) {
+					pointCube.SetActive(false);
+					score++;
+				}
 
-			// Update camera position and target
-			Vector3 playerPos = player.GetPosition();
-			camera.position.x = playerPos.x + 0.0f;
-			camera.position.y = playerPos.y + 5.0f;
-			camera.position.z = playerPos.z + 10.0f;
-			camera.target = playerPos;
+				// Update camera position and target
+				Vector3 playerPos = player.GetPosition();
+				camera.position.x = playerPos.x + 0.0f;
+				camera.position.y = playerPos.y + 5.0f;
+				camera.position.z = playerPos.z + 10.0f;
+				camera.target = playerPos;
 
-			for (const Wall& wall : walls) {
-				BoundingBox wallBox = wall.GetBoundingBox();
+				for (const Wall& wall : walls) {
+					BoundingBox wallBox = wall.GetBoundingBox();
 
-				if (CheckCollisionBoxes(playerBox, wallBox)) {
-					collision = true;
-					player.ResetPosition(); // Reset player position to the previous frame
-					break;
+					if (CheckCollisionBoxes(playerBox, wallBox)) {
+						collision = true;
+						player.ResetPosition(); // Reset player position to the previous frame
+						break;
+					}
 				}
 			}
-
 
 
 			// Draw
@@ -176,6 +187,11 @@ int main(void) {
 			EndMode3D();
 
 			DrawText(TextFormat("Score: %d", score), 10, 40, 20, GRAY);
+
+			if (isDead) {
+				DrawText("DEAD", screenWidth / 2 - MeasureText("DEAD", 40) / 2, screenHeight / 2 - 20, 40, RED);
+			}
+
 
 			DrawFPS(10, 10);
 

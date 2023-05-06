@@ -9,7 +9,8 @@ public:
     void Update(const Vector3& target, const int mapLayout[][21]);
     void Draw() const;
     void SetSpeed(float newSpeed);
-
+    Vector3 GetPosition() const;
+    float GetRadius() const;
 
 private:
     Vector3 position;

@@ -23,3 +23,11 @@ void Enemy::Draw() const {
 void Enemy::SetSpeed(float newSpeed) {
     speed = newSpeed;
 }
+
+Vector3 Enemy::GetPosition() const {
+    return position;
+}
+
+float Enemy::GetRadius() const {
+    return radius;
+}
