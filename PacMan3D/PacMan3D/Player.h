@@ -1,3 +1,5 @@
+#pragma once
+#include "Enemy.h"
 #include "raylib.h"
 
 class Player {
@@ -11,6 +13,7 @@ public:
     void ResetPosition();
     void SetColor(Color color);
     void SetSpeed(float newSpeed);
+    float GetRadius() const;
 
 private:
     Vector3 position;

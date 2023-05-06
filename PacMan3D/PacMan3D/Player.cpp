@@ -53,3 +53,4 @@ void Player::SetColor(Color newColor) {
 void Player::SetSpeed(float newSpeed) {
     speed = newSpeed;
 }
+
