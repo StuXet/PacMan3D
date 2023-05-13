@@ -14,6 +14,7 @@ public:
     void SetColor(Color color);
     void SetSpeed(float newSpeed);
     float GetRadius() const;
+    bool powerEaten;
 
 private:
     Vector3 position;

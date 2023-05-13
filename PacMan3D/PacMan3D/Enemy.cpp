@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include <raymath.h>
 
+
 Enemy::Enemy(Vector3 position, float radius, Color color)
     : position(position), radius(radius), color(color), speed(0.1f) {}
 

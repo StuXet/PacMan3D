@@ -30,6 +30,7 @@ int main(void) {
 
 	int score = 0;
 	PointCube pointCube({ 5.0f, 0.5f, 1.0f }, 1.0f, BLUE);
+	PointCube powerCube({ 7.0f, 0.5f, 1.0f }, 1.0f, PINK);
 
 	/*Wall leftWall({ -10.5f, 0.5f, 0.0f }, { 1.0f, 1.0f, 20.0f }, GRAY);
 	Wall topWall({ 0.0f, 0.5f, -10.5f }, { 20.0f, 1.0f, 1.0f }, GRAY);
@@ -41,169 +42,183 @@ int main(void) {
 	bool isDead = false;
 
 
-	while (!WindowShouldClose()) 
+	float deltaTime = GetFrameTime();
+
+	const int mapWidth = 21;
+	const int mapHeight = 21;
+
+	int mapLayout[mapHeight][mapWidth] =
 	{
-		float deltaTime = GetFrameTime();
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+		{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1},
+		{1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1},
+		{1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1},
+		{1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+		{1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1},
+		{1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1},
+		{1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+		{1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1},
+		{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+		{1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	};
 
-		const int mapWidth = 21;
-		const int mapHeight = 21;
+	std::vector<Wall> walls;
 
-		int mapLayout[mapHeight][mapWidth] =
-		{
-			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1},
-			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
-			{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
-			{1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1},
-			{1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1},
-			{1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1},
-			{1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-			{1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1},
-			{1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1},
-			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1},
-			{1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-			{1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1},
-			{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-			{1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1},
-			{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-			{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		};
+	const float wallWidth = 1.0f;
+	const float wallHeight = 1.0f;
+	const float wallDepth = 1.0f;
 
-		std::vector<Wall> walls;
+	for (int i = 0; i < mapHeight; ++i) {
+		for (int j = 0; j < mapWidth; ++j) {
+			if (mapLayout[i][j] == 1) {
+				float x = j * wallWidth;
+				float y = wallHeight / 2;
+				float z = i * wallDepth;
 
-		const float wallWidth = 1.0f;
-		const float wallHeight = 1.0f;
-		const float wallDepth = 1.0f;
-
-		for (int i = 0; i < mapHeight; ++i) {
-			for (int j = 0; j < mapWidth; ++j) {
-				if (mapLayout[i][j] == 1) {
-					float x = j * wallWidth;
-					float y = wallHeight / 2;
-					float z = i * wallDepth;
-
-					walls.emplace_back(Vector3{ x, y, z }, Vector3{ wallWidth, wallHeight, wallDepth }, GRAY);
-				}
+				walls.emplace_back(Vector3{ x, y, z }, Vector3{ wallWidth, wallHeight, wallDepth }, GRAY);
 			}
 		}
+	}
 
-		SetTargetFPS(60);
-		//--------------------------------------------------------------------------------------
+	SetTargetFPS(60);
+	//--------------------------------------------------------------------------------------
 
-		// Main game loop
-		while (!WindowShouldClose()) {
-			// Update
-			//----------------------------------------------------------------------------------
+	// Main game loop
+	while (!WindowShouldClose()) {
+		// Update
+		//----------------------------------------------------------------------------------
 
-			//ENEMY
-			if (!isDead) {
-				player.Update();
+		//ENEMY
+		if (!isDead) {
+			player.Update();
 
-				// Move enemy
-				enemy.Update(player.GetPosition(), mapLayout);
+			// Move enemy
+			enemy.Update(player.GetPosition(), mapLayout);
 
-				// Check for collision between player and enemy
-				if (CheckCollisionSpheres(player.GetPosition(), player.GetRadius(), enemy.GetPosition(), enemy.GetRadius())) {
+			// Check for collision between player and enemy
+			if (CheckCollisionSpheres(player.GetPosition(), player.GetRadius(), enemy.GetPosition(), enemy.GetRadius()))
+			{
+				if (player.powerEaten == true)
+				{
+					//Implement respwan
+				}
+				else
+				{
 					isDead = true;
 				}
-
-
-
-				// Update player
-				//player.Update();
-
-				collision = false;
-
-				BoundingBox playerBox = player.GetBoundingBox();
-
-
-				/*BoundingBox leftWallBox = leftWall.GetBoundingBox();
-				BoundingBox topWallBox = topWall.GetBoundingBox();
-				BoundingBox bottomWallBox = bottomWall.GetBoundingBox();*/
-
-				//if (CheckCollisionBoxes(playerBox, leftWallBox) || CheckCollisionBoxes(playerBox, topWallBox) || CheckCollisionBoxes(playerBox, bottomWallBox)) 
-				//{
-				//	collision = true;
-				//	player.ResetPosition(); // Reset player position to the previous frame
-				//}
-
-				player.SetColor(collision ? RED : YELLOW);
-
-				if (!collision && pointCube.IsActive() && CheckCollisionBoxes(playerBox, pointCube.GetBoundingBox())) {
-					pointCube.SetActive(false);
-					score++;
-				}
-
-				// Update camera position and target
-				Vector3 playerPos = player.GetPosition();
-				camera.position.x = playerPos.x + 0.0f;
-				camera.position.y = playerPos.y + 5.0f;
-				camera.position.z = playerPos.z + 10.0f;
-				camera.target = playerPos;
-
-				for (const Wall& wall : walls) {
-					BoundingBox wallBox = wall.GetBoundingBox();
-
-					if (CheckCollisionBoxes(playerBox, wallBox)) {
-						collision = true;
-						player.ResetPosition(); // Reset player position to the previous frame
-						break;
-					}
-				}
 			}
 
 
-			// Draw
-			//----------------------------------------------------------------------------------
-			BeginDrawing();
 
-			ClearBackground(RAYWHITE);
 
-			BeginMode3D(camera);
+			// Update player
+			//player.Update();
 
-			/*leftWall.Draw();
-			topWall.Draw();
-			bottomWall.Draw();*/
+			collision = false;
+
+			BoundingBox playerBox = player.GetBoundingBox();
+
+
+			/*BoundingBox leftWallBox = leftWall.GetBoundingBox();
+			BoundingBox topWallBox = topWall.GetBoundingBox();
+			BoundingBox bottomWallBox = bottomWall.GetBoundingBox();*/
+
+			//if (CheckCollisionBoxes(playerBox, leftWallBox) || CheckCollisionBoxes(playerBox, topWallBox) || CheckCollisionBoxes(playerBox, bottomWallBox)) 
+			//{
+			//	collision = true;
+			//	player.ResetPosition(); // Reset player position to the previous frame
+			//}
+
+			player.SetColor(collision ? RED : YELLOW);
+
+			if (!collision && pointCube.IsActive() && CheckCollisionBoxes(playerBox, pointCube.GetBoundingBox())) {
+				pointCube.SetActive(false);
+				score++;
+			}
+
+			if (!collision && powerCube.IsActive() && CheckCollisionBoxes(playerBox, powerCube.GetBoundingBox()))
+			{
+				powerCube.SetActive(false);
+				score++;
+				player.powerEaten = true;
+			}
+
+			// Update camera position and target
+			Vector3 playerPos = player.GetPosition();
+			camera.position.x = playerPos.x + 0.0f;
+			camera.position.y = playerPos.y + 5.0f;
+			camera.position.z = playerPos.z + 10.0f;
+			camera.target = playerPos;
 
 			for (const Wall& wall : walls) {
-				wall.Draw();
+				BoundingBox wallBox = wall.GetBoundingBox();
+
+				if (CheckCollisionBoxes(playerBox, wallBox)) {
+					collision = true;
+					player.ResetPosition(); // Reset player position to the previous frame
+					break;
+				}
 			}
-
-
-			pointCube.Draw();
-
-			//ENEMY
-			enemy.Draw();
-
-
-			// Draw player
-			player.Draw();
-
-			//DrawGrid(20, 1.0f);        // Draw a grid
-
-			EndMode3D();
-
-			DrawText(TextFormat("Score: %d", score), 10, 40, 20, GRAY);
-
-			if (isDead) {
-				DrawText("DEAD", screenWidth / 2 - MeasureText("DEAD", 40) / 2, screenHeight / 2 - 20, 40, RED);
-			}
-
-
-			DrawFPS(10, 10);
-
-			EndDrawing();
-			//----------------------------------------------------------------------------------
 		}
 
-		// De-Initialization
-		//--------------------------------------------------------------------------------------
-		CloseWindow();        // Close window and OpenGL context
-		//--------------------------------------------------------------------------------------
 
-		return 0;
+		// Draw
+		//----------------------------------------------------------------------------------
+		BeginDrawing();
+
+		ClearBackground(RAYWHITE);
+
+		BeginMode3D(camera);
+
+		/*leftWall.Draw();
+		topWall.Draw();
+		bottomWall.Draw();*/
+
+		for (const Wall& wall : walls) {
+			wall.Draw();
+		}
+
+
+		pointCube.Draw();
+		powerCube.Draw();
+
+		//ENEMY
+		enemy.Draw();
+
+
+		// Draw player
+		player.Draw();
+
+		//DrawGrid(20, 1.0f);        // Draw a grid
+
+		EndMode3D();
+
+		DrawText(TextFormat("Score: %d", score), 10, 40, 20, GRAY);
+
+		if (isDead) {
+			DrawText("DEAD", screenWidth / 2 - MeasureText("DEAD", 40) / 2, screenHeight / 2 - 20, 40, RED);
+		}
+
+
+		DrawFPS(10, 10);
+
+		EndDrawing();
+		//----------------------------------------------------------------------------------
 	}
+
+	// De-Initialization
+	//--------------------------------------------------------------------------------------
+	CloseWindow();        // Close window and OpenGL context
+	//--------------------------------------------------------------------------------------
+
+	return 0;
 }

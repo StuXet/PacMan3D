@@ -13,8 +13,8 @@ public:
     float GetRadius() const;
 
 private:
-    Vector3 position;
     float radius;
     Color color;
     float speed;
+    Vector3 position;
 };
