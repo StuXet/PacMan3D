@@ -6,6 +6,7 @@
 #include "Wall.h"
 
 
+
 int main(void) {
 
 	// Initialization
@@ -109,7 +110,8 @@ int main(void) {
 			{
 				if (player.powerEaten == true)
 				{
-					//Implement respwan
+					//enemy.SetActive(false);
+					enemy.Respawn();
 				}
 				else
 				{
@@ -145,12 +147,12 @@ int main(void) {
 				score++;
 			}
 
-			if (!collision && powerCube.IsActive() && CheckCollisionBoxes(playerBox, powerCube.GetBoundingBox()))
-			{
+			if (!collision && powerCube.IsActive() && CheckCollisionBoxes(playerBox, powerCube.GetBoundingBox())) {
 				powerCube.SetActive(false);
 				score++;
-				player.powerEaten = true;
+				player.EatPower();
 			}
+
 
 			// Update camera position and target
 			Vector3 playerPos = player.GetPosition();

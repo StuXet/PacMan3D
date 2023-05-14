@@ -3,7 +3,7 @@
 
 
 Enemy::Enemy(Vector3 position, float radius, Color color)
-    : position(position), radius(radius), color(color), speed(0.1f) {}
+    : position(position), radius(radius), color(color), speed(0.1f), respawnPosition({ 10.0f, 0.5f, 10.0f }) {}
 
 void Enemy::Update(const Vector3& target, const int mapLayout[][21])
 {
@@ -18,7 +18,8 @@ void Enemy::Update(const Vector3& target, const int mapLayout[][21])
 
 
 void Enemy::Draw() const {
-    DrawSphere(position, radius, color);
+    if (active)
+        DrawSphere(position, radius, color);
 }
 
 void Enemy::SetSpeed(float newSpeed) {
@@ -31,4 +32,18 @@ Vector3 Enemy::GetPosition() const {
 
 float Enemy::GetRadius() const {
     return radius;
+}
+
+void Enemy::SetActive(bool isActive) {
+    active = isActive;
+}
+
+bool Enemy::IsActive() {
+    return active;
+}
+
+void Enemy::Respawn()
+{
+    position = respawnPosition;
+    active = true;
 }

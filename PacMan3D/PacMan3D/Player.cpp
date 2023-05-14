@@ -14,6 +14,10 @@ void Player::Update() {
         position.z += speed;
     else if (IsKeyDown(KEY_UP))
         position.z -= speed;
+
+    if (powerEaten && GetTime() - powerEatenTime > powerDuration) {
+        powerEaten = false;
+    }
 }
 
 void Player::Draw() const {
@@ -56,4 +60,10 @@ void Player::SetSpeed(float newSpeed) {
 
 float Player::GetRadius() const {
     return radius;
+}
+
+void Player::EatPower()
+{
+    powerEaten = true;
+    powerEatenTime = GetTime();
 }

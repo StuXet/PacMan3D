@@ -14,7 +14,10 @@ public:
     void SetColor(Color color);
     void SetSpeed(float newSpeed);
     float GetRadius() const;
-    bool powerEaten;
+    bool powerEaten = false;
+    float powerEatenTime = 0.0f;
+    float powerDuration = 5.0f;
+    void EatPower();
 
 private:
     Vector3 position;
