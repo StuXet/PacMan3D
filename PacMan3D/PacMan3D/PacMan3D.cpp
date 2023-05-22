@@ -1,5 +1,4 @@
 #include <vector>
-#include "Ghost.h"
 #include "raylib.h"
 #include "Player.h"
 #include "PointCube.h"
