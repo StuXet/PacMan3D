@@ -50,7 +50,7 @@ int main(void) {
 	int mapLayout[mapHeight][mapWidth] =
 	{
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 2, 0, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
@@ -72,6 +72,8 @@ int main(void) {
 	};
 
 	std::vector<Wall> walls;
+	std::vector<PointCube> pointCubes;
+	std::vector<PointCube> powerCubes;
 
 	const float wallWidth = 1.0f;
 	const float wallHeight = 1.0f;
@@ -79,12 +81,26 @@ int main(void) {
 
 	for (int i = 0; i < mapHeight; ++i) {
 		for (int j = 0; j < mapWidth; ++j) {
-			if (mapLayout[i][j] == 1) {
-				float x = j * wallWidth;
-				float y = wallHeight / 2;
-				float z = i * wallDepth;
+			float x = j * wallWidth;
+			float y = wallHeight / 2;
+			float z = i * wallDepth;
 
+			switch (mapLayout[i][j]) {
+			case 1:  // Wall
 				walls.emplace_back(Vector3{ x, y, z }, Vector3{ wallWidth, wallHeight, wallDepth }, GRAY);
+				break;
+
+			case 2:  // PointCube
+				pointCubes.emplace_back(Vector3{ x, y, z }, 1.0f, BLUE);
+				break;
+
+			case 3:  // PowerCube
+				powerCubes.emplace_back(Vector3{ x, y, z }, 1.0f, PINK);
+				break;
+
+			default:
+				// Do nothing for empty space
+				break;
 			}
 		}
 	}
@@ -141,7 +157,7 @@ int main(void) {
 
 			player.SetColor(collision ? RED : YELLOW);
 
-			if (!collision && pointCube.IsActive() && CheckCollisionBoxes(playerBox, pointCube.GetBoundingBox())) {
+			/*if (!collision && pointCube.IsActive() && CheckCollisionBoxes(playerBox, pointCube.GetBoundingBox())) {
 				pointCube.SetActive(false);
 				score++;
 			}
@@ -150,6 +166,21 @@ int main(void) {
 				powerCube.SetActive(false);
 				score++;
 				player.EatPower();
+			}*/
+
+			for (PointCube& cube : pointCubes) {
+				if (!collision && cube.IsActive() && CheckCollisionBoxes(playerBox, cube.GetBoundingBox())) {
+					cube.SetActive(false);
+					score++;
+				}
+			}
+
+			for (PointCube& cube : powerCubes) {
+				if (!collision && cube.IsActive() && CheckCollisionBoxes(playerBox, cube.GetBoundingBox())) {
+					cube.SetActive(false);
+					score++;
+					player.EatPower();
+				}
 			}
 
 
@@ -189,8 +220,16 @@ int main(void) {
 		}
 
 
-		pointCube.Draw();
-		powerCube.Draw();
+		/*pointCube.Draw();
+		powerCube.Draw();*/
+
+		for (const PointCube& cube : pointCubes) {
+			cube.Draw();
+		}
+
+		for (const PointCube& cube : powerCubes) {
+			cube.Draw();
+		}
 
 		//ENEMY
 		enemy.Draw();
