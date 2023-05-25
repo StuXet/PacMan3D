@@ -16,7 +16,7 @@ public:
     float GetRadius() const;
     bool powerEaten = false;
     float powerEatenTime = 0.0f;
-    float powerDuration = 5.0f;
+    float powerDuration = 10.0f;
     void EatPower();
 
 private:
