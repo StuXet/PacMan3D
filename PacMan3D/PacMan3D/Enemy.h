@@ -15,9 +15,12 @@ public:
 	void SetActive(bool isActive);
 	bool IsActive();
 	void Respawn();
+	void ResetPosition();
+	BoundingBox GetBoundingBox() const;
 
 
 private:
+	Vector3 previousPosition;
 	float radius;
 	Color color;
 	float speed;

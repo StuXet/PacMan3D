@@ -32,15 +32,11 @@ int main(void) {
 	PointCube pointCube({ 5.0f, 0.5f, 1.0f }, 1.0f, BLUE);
 	PointCube powerCube({ 7.0f, 0.5f, 1.0f }, 1.0f, PINK);
 
-	/*Wall leftWall({ -10.5f, 0.5f, 0.0f }, { 1.0f, 1.0f, 20.0f }, GRAY);
-	Wall topWall({ 0.0f, 0.5f, -10.5f }, { 20.0f, 1.0f, 1.0f }, GRAY);
-	Wall bottomWall({ 0.0f, 0.5f, 10.5f }, { 20.0f, 1.0f, 1.0f }, GRAY);*/
-
 	//ENEMY
-	Enemy enemy({ 10.0f, 0.5f, 10.0f }, 0.3f, RED);
+	Enemy enemy({ 11.0f, 0.5f, 10.0f }, 0.3f, RED);
 	enemy.SetSpeed(0.08f);
-	bool isDead = false;
 
+	bool isDead = false;
 
 	float deltaTime = GetFrameTime();
 
@@ -50,24 +46,24 @@ int main(void) {
 	int mapLayout[mapHeight][mapWidth] =
 	{
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 2, 0, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1},
 		{1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1},
 		{1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
-		{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+		{1, 2, 0, 2, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 0, 2, 1},
 		{1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1},
-		{1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1},
+		{1, 2, 1, 2, 1, 2, 1, 2, 0, 2, 0, 2, 0, 2, 1, 2, 1, 2, 1, 2, 1},
 		{1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1},
-		{1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+		{1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1},
 		{1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1},
-		{1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1},
+		{1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1},
+		{1, 2, 1, 1, 0, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 0, 1, 1, 2, 1},
 		{1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
 		{1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1},
 		{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-		{1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1},
+		{1, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	};
 
@@ -91,11 +87,11 @@ int main(void) {
 				break;
 
 			case 2:  // PointCube
-				pointCubes.emplace_back(Vector3{ x, y, z }, 1.0f, BLUE);
+				pointCubes.emplace_back(Vector3{ x, y, z }, 0.5f, BLUE);
 				break;
 
 			case 3:  // PowerCube
-				powerCubes.emplace_back(Vector3{ x, y, z }, 1.0f, PINK);
+				powerCubes.emplace_back(Vector3{ x, y, z }, 0.5f, PINK);
 				break;
 
 			default:
@@ -109,12 +105,14 @@ int main(void) {
 	//--------------------------------------------------------------------------------------
 
 	// Main game loop
-	while (!WindowShouldClose()) {
+	while (!WindowShouldClose()) 
+	{
 		// Update
 		//----------------------------------------------------------------------------------
 
 		//ENEMY
-		if (!isDead) {
+		if (!isDead && score != 78) 
+		{
 			player.Update();
 
 			// Move enemy
@@ -134,39 +132,13 @@ int main(void) {
 				}
 			}
 
-
-
-
-			// Update player
-			//player.Update();
-
 			collision = false;
 
 			BoundingBox playerBox = player.GetBoundingBox();
-
-
-			/*BoundingBox leftWallBox = leftWall.GetBoundingBox();
-			BoundingBox topWallBox = topWall.GetBoundingBox();
-			BoundingBox bottomWallBox = bottomWall.GetBoundingBox();*/
-
-			//if (CheckCollisionBoxes(playerBox, leftWallBox) || CheckCollisionBoxes(playerBox, topWallBox) || CheckCollisionBoxes(playerBox, bottomWallBox)) 
-			//{
-			//	collision = true;
-			//	player.ResetPosition(); // Reset player position to the previous frame
-			//}
+			BoundingBox enemyBox = enemy.GetBoundingBox();
 
 			player.SetColor(collision ? RED : YELLOW);
 
-			/*if (!collision && pointCube.IsActive() && CheckCollisionBoxes(playerBox, pointCube.GetBoundingBox())) {
-				pointCube.SetActive(false);
-				score++;
-			}
-
-			if (!collision && powerCube.IsActive() && CheckCollisionBoxes(playerBox, powerCube.GetBoundingBox())) {
-				powerCube.SetActive(false);
-				score++;
-				player.EatPower();
-			}*/
 
 			for (PointCube& cube : pointCubes) {
 				if (!collision && cube.IsActive() && CheckCollisionBoxes(playerBox, cube.GetBoundingBox())) {
@@ -193,11 +165,15 @@ int main(void) {
 
 			for (const Wall& wall : walls) {
 				BoundingBox wallBox = wall.GetBoundingBox();
+				BoundingBox playerBox = player.GetBoundingBox();
+				BoundingBox enemyBox = enemy.GetBoundingBox();
 
 				if (CheckCollisionBoxes(playerBox, wallBox)) {
-					collision = true;
-					player.ResetPosition(); // Reset player position to the previous frame
-					break;
+					player.ResetPosition();
+				}
+
+				if (CheckCollisionBoxes(enemyBox, wallBox)) {
+					//enemy.ResetPosition(); //UNCOMMENT FOR COLLISION
 				}
 			}
 		}
@@ -211,17 +187,10 @@ int main(void) {
 
 		BeginMode3D(camera);
 
-		/*leftWall.Draw();
-		topWall.Draw();
-		bottomWall.Draw();*/
-
 		for (const Wall& wall : walls) {
 			wall.Draw();
 		}
 
-
-		/*pointCube.Draw();
-		powerCube.Draw();*/
 
 		for (const PointCube& cube : pointCubes) {
 			cube.Draw();
@@ -238,14 +207,17 @@ int main(void) {
 		// Draw player
 		player.Draw();
 
-		//DrawGrid(20, 1.0f);        // Draw a grid
-
 		EndMode3D();
 
 		DrawText(TextFormat("Score: %d", score), 10, 40, 20, GRAY);
 
-		if (isDead) {
+		if (isDead)
+		{
 			DrawText("DEAD", screenWidth / 2 - MeasureText("DEAD", 40) / 2, screenHeight / 2 - 20, 40, RED);
+		}
+		else if (score == 78)
+		{
+			DrawText("WIN", screenWidth / 2 - MeasureText("WIN", 40) / 2, screenHeight / 2 - 20, 40, GREEN);
 		}
 
 
